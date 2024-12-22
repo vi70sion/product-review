@@ -40,9 +40,10 @@ public class ReviewController {
             byte[] adPhoto = image.getBytes();   // image to byte array
             review.setPhoto(adPhoto);
             review.setUserId(jwtUtil.decodeJwt(authorizationHeader).get("UserId", UUID.class)); // user ID from JWT
-            if (reviewService.addReview(review)) return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body("success");
+// atkomentuoti, nepadarytas addReview
+//            if (reviewService.addReview(review)) return ResponseEntity
+//                    .status(HttpStatus.OK)
+//                    .body("success");
         } catch (IOException e) {
             // error;
         }

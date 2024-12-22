@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.UUID;
 
@@ -19,21 +20,20 @@ public class JwtUtil {
     @Value("${encryption.secretKey}")
     private String SECRET_KEY;
 
-    public String generateJwt(String username, String password, int userId) {
-        Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+    public String generateJwt(UUID userId) {
+        //Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+        byte[] keyBytes = Base64.getDecoder().decode(SECRET_KEY);
+        Key key = Keys.hmacShaKeyFor(keyBytes);
 
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
-        Date exp = new Date(nowMillis + 120 * 60 * 1000); // 120 minutes
+        Date exp = new Date(nowMillis + 24 * 60 * 60 * 1000); // 24 hours
 
         String jwt = Jwts.builder()
-                .setIssuer("manokompanija.eu")
-                .setSubject("manokompanija.eu")
-                .claim("Username", username)
-                .claim("Password", password)
+                .setIssuer("productreview.lt")
+                .setSubject("productreview.lt")
                 .claim("UserId", userId)
                 .claim("DateOfLogin", new SimpleDateFormat("yyyy-MM-dd").format(now))
-                .setId(UUID.randomUUID().toString())
                 .setIssuedAt(now)
                 .setExpiration(exp)
                 .signWith(key, SignatureAlgorithm.HS256)
