@@ -34,4 +34,18 @@ public class UserDataReposirory {
         }
     }
 
+    public String getUserNameById(UUID userId) {
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try (Connection _connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement statement = _connection.prepareStatement(sql)) {
+            statement.setString(1, userId.toString());
+            ResultSet resultSet = statement.executeQuery();
+            if(!resultSet.next()) return "";
+            return resultSet.getString("name");
+        } catch (SQLException e) {
+            // throw new RuntimeException(e);
+        }
+        return "";
+    }
+
 }

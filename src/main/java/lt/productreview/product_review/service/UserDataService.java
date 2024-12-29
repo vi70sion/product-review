@@ -17,4 +17,8 @@ public class UserDataService {
         return userDataReposirory.validateUser(user);
     }
 
+    public String getUserNameById(UUID id) {
+        return userDataReposirory.getUserNameById(id);
+    }
+
 }

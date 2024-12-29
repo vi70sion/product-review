@@ -22,6 +22,25 @@ public class ReviewController {
     @Autowired
     private ReviewService reviewService;
 
+    @GetMapping("/category")
+    public ResponseEntity<?> getReviewsByCategory(@RequestParam String category,
+                                          @RequestHeader("Authorization") String authorizationHeader) {
+        if(authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Authorization header must be provided and start with 'Bearer '.");
+        }
+        String token = authorizationHeader.substring(7);
+        if(!jwtUtil.validateToken(token)) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Invalid or expired JWT token.");
+        }
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(reviewService.getReviewsByCategory(category));
+    }
+
     @PutMapping("/add")
     public ResponseEntity<?> addReview(@RequestPart("review") String reviewJson,
                                        @RequestParam("image") MultipartFile image,

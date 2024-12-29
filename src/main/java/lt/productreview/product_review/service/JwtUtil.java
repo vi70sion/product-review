@@ -5,6 +5,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
@@ -20,10 +21,19 @@ public class JwtUtil {
     @Value("${encryption.secretKey}")
     private String SECRET_KEY;
 
+    private Key key;
+
+    @PostConstruct
+    public void initKey() {
+        // Decode Base64 key
+        byte[] keyBytes = Base64.getDecoder().decode(SECRET_KEY);
+        key = Keys.hmacShaKeyFor(keyBytes);
+    }
+
     public String generateJwt(UUID userId) {
         //Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
-        byte[] keyBytes = Base64.getDecoder().decode(SECRET_KEY);
-        Key key = Keys.hmacShaKeyFor(keyBytes);
+//        byte[] keyBytes = Base64.getDecoder().decode(SECRET_KEY);
+//        Key key = Keys.hmacShaKeyFor(keyBytes);
 
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
@@ -43,7 +53,7 @@ public class JwtUtil {
     }
 
     public Claims decodeJwt(String jwt) {
-        Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+        //Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)

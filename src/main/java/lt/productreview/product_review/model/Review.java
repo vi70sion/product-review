@@ -13,6 +13,9 @@ public class Review {
     private byte[] photo;
     private LocalDateTime createdAt;
 
+    public Review() {
+    }
+
     // Constructor
     public Review(int id, UUID userId, int categoryId, String productName, String reviewText, int rating, byte[] photo, LocalDateTime createdAt) {
         this.id = id;

@@ -54,5 +54,30 @@ public class UserDataController {
         return ResponseEntity.status(200).body("Success");
     }
 
+    @GetMapping("/name")
+    public ResponseEntity<?> getUserNameById(@RequestParam String id,
+                                             @RequestHeader("Authorization") String authorizationHeader) {
+        if(authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Authorization header must be provided and start with 'Bearer '.");
+        }
+        String token = authorizationHeader.substring(7);
+        if(!jwtUtil.validateToken(token)) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Invalid or expired JWT token.");
+        }
+        UUID userId;
+        try {
+            userId = UUID.fromString(id);
+        } catch (IllegalArgumentException e) {
+            //error: wrong UUID format
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
+        }
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userDataService.getUserNameById(userId));
+    }
 
 }
