@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class CategorieRepository {
+public class CategoriesRepository {
 
     @Value("${database.url}")
     private String url;
@@ -33,6 +33,21 @@ public class CategorieRepository {
         } catch (SQLException e) {
             // SQL error
             return null;
+        }
+    }
+
+    public int getCategoryIdFromName(String category){
+        String sql = "SELECT id FROM categories WHERE name = ?;";
+        try (Connection _connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement statement = _connection.prepareStatement(sql)) {
+            int categoryId =0;
+            statement.setString(1, category);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) categoryId = resultSet.getInt("id");
+            return categoryId;
+        } catch (SQLException e) {
+            // SQL error
+            return 0;
         }
     }
 

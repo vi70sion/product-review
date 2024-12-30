@@ -1,7 +1,9 @@
 package lt.productreview.product_review.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
 import lt.productreview.product_review.model.Review;
+import lt.productreview.product_review.repository.CategoriesRepository;
 import lt.productreview.product_review.service.JwtUtil;
 import lt.productreview.product_review.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ public class ReviewController {
     private JwtUtil jwtUtil;
     @Autowired
     private ReviewService reviewService;
+    @Autowired
+    private CategoriesRepository categoriesRepository;
 
     @GetMapping("/category")
     public ResponseEntity<?> getReviewsByCategory(@RequestParam String category,
@@ -41,10 +45,11 @@ public class ReviewController {
                 .body(reviewService.getReviewsByCategory(category));
     }
 
-    @PutMapping("/add")
+    @PostMapping("/add")
     public ResponseEntity<?> addReview(@RequestPart("review") String reviewJson,
                                        @RequestParam("image") MultipartFile image,
-                                       @RequestHeader("Authorisation") String authorizationHeader) {
+                                       @RequestParam("category") String category,
+                                       @RequestHeader("Authorization") String authorizationHeader) {
         if(authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             return ResponseEntity.status(400).body("Authorization header must be provided and start with 'Bearer '.");
         }
@@ -56,13 +61,18 @@ public class ReviewController {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             Review review = objectMapper.readValue(reviewJson, Review.class);
-            byte[] adPhoto = image.getBytes();   // image to byte array
-            review.setPhoto(adPhoto);
-            review.setUserId(jwtUtil.decodeJwt(authorizationHeader).get("UserId", UUID.class)); // user ID from JWT
-// atkomentuoti, nepadarytas addReview
-//            if (reviewService.addReview(review)) return ResponseEntity
-//                    .status(HttpStatus.OK)
-//                    .body("success");
+            byte[] reviewPhoto = image.getBytes();   // image to byte array
+            review.setPhoto(reviewPhoto);
+            review.setCategoryId(categoriesRepository.getCategoryIdFromName(category));
+
+            // user ID from JWT
+            Claims claims = jwtUtil.decodeJwt(token);
+            String userIdString = claims.get("UserId", String.class);
+            review.setUserId(UUID.fromString(userIdString));
+
+            if (reviewService.addReview(review)) return ResponseEntity
+                                                            .status(HttpStatus.OK)
+                                                            .body("success");
         } catch (IOException e) {
             // error;
         }

@@ -16,6 +16,8 @@ public class ReviewService {
         return reviewRepository.getReviewsByCategory(category);
     }
 
-
+    public boolean addReview(Review review) {
+        return reviewRepository.addReview(review);
+    }
 
 }
