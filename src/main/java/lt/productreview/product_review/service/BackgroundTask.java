@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BackgroundTask {
-    @Scheduled(fixedRate = 60*60*1000) // every hour
+    @Scheduled(fixedRate = 1*60*60*1000) // every hour
     public void performMemoryCleanup() {
         System.gc();
         System.out.println("Memory cleanup task completed.");

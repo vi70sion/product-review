@@ -31,10 +31,6 @@ public class JwtUtil {
     }
 
     public String generateJwt(UUID userId) {
-        //Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
-//        byte[] keyBytes = Base64.getDecoder().decode(SECRET_KEY);
-//        Key key = Keys.hmacShaKeyFor(keyBytes);
-
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
         Date exp = new Date(nowMillis + 24 * 60 * 60 * 1000); // 24 hours
@@ -64,7 +60,6 @@ public class JwtUtil {
         return claims;
     }
 
-
     public Boolean validateToken(String token){
         try {
             decodeJwt(token);
@@ -74,5 +69,10 @@ public class JwtUtil {
         return true;
     }
 
+    public UUID userIdFromToken (String token) {
+        Claims claims = decodeJwt(token);
+        String userIdString = claims.get("UserId", String.class);
+        return UUID.fromString(userIdString);
+    }
 
 }

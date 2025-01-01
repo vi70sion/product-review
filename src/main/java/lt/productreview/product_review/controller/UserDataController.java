@@ -1,17 +1,15 @@
 package lt.productreview.product_review.controller;
 
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Encoders;
-import io.jsonwebtoken.security.Keys;
 import lt.productreview.product_review.model.User;
+import lt.productreview.product_review.service.AuthorizationService;
 import lt.productreview.product_review.service.JwtUtil;
 import lt.productreview.product_review.service.UserDataService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -20,15 +18,20 @@ import java.util.UUID;
 @RequestMapping("/api/user")
 public class UserDataController {
 
+    @Value("${encryption.secretWord}")
+    private String SECRET_WORD;
+
     @Autowired
     private JwtUtil jwtUtil;
-
+    @Autowired
+    private AuthorizationService authorizationService;
     @Autowired
     private UserDataService userDataService;
 
-
     @PostMapping("/login")
     public ResponseEntity <Map<String, String>> checkUser(@RequestBody User user) {
+        String hashedPassword = userDataService.hashPasswordWithSecret(user.getPassword(), SECRET_WORD);
+        user.setPassword(hashedPassword);
         UUID userId = userDataService.validateUser(user);
         if (userId == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         String jwtToken = jwtUtil.generateJwt(userId);
@@ -40,15 +43,12 @@ public class UserDataController {
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@RequestBody User user,
                                         @RequestHeader("Authorisation") String authorizationHeader) {
-        if(authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(400).body("Authorization header must be provided and start with 'Bearer '.");
-        }
-        String token = authorizationHeader.substring(7);
-        if(!jwtUtil.validateToken(token)) {
-            return ResponseEntity.status(401).body("Invalid or expired JWT token.");
+        ResponseEntity<String> validationResponse = authorizationService.validateAuthorizationHeader(authorizationHeader);
+        if (validationResponse != null) {
+            return validationResponse;
         }
 
-        //todo update user info in repository
+        //todo update user info to repository
 
         // kad nesinervuotų
         return ResponseEntity.status(200).body("Success");
@@ -57,23 +57,16 @@ public class UserDataController {
     @GetMapping("/name")
     public ResponseEntity<?> getUserNameById(@RequestParam String id,
                                              @RequestHeader("Authorization") String authorizationHeader) {
-        if(authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Authorization header must be provided and start with 'Bearer '.");
-        }
-        String token = authorizationHeader.substring(7);
-        if(!jwtUtil.validateToken(token)) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body("Invalid or expired JWT token.");
+        ResponseEntity<String> validationResponse = authorizationService.validateAuthorizationHeader(authorizationHeader);
+        if (validationResponse != null) {
+            return validationResponse;
         }
         UUID userId;
         try {
             userId = UUID.fromString(id);
         } catch (IllegalArgumentException e) {
             //error: wrong UUID format
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid UUID format.");
         }
         return ResponseEntity
                 .status(HttpStatus.OK)

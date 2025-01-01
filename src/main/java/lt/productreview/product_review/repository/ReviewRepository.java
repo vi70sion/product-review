@@ -61,7 +61,7 @@ public class ReviewRepository {
             statement.setString(4, review.getReviewText());
             statement.setBytes(5, review.getPhoto());
             statement.setInt(6, review.getRating());
-            statement.setString(7, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            statement.setString(7, review.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) return true;
@@ -70,5 +70,19 @@ public class ReviewRepository {
         }
         return false;
     }
+
+    public boolean deleteReviewById(int reviewId) {
+        String sql = "DELETE FROM reviews WHERE id = ?";
+        try (Connection _connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement statement = _connection.prepareStatement(sql)) {
+            statement.setInt(1, reviewId);
+            int rowsDeleted = statement.executeUpdate();
+            if(rowsDeleted > 0) return true;
+        } catch (SQLException e) {
+            // throw new RuntimeException(e);
+        }
+        return false;
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package lt.productreview.product_review.repository;
 
+import lt.productreview.product_review.model.Role;
 import lt.productreview.product_review.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -8,7 +9,7 @@ import java.sql.*;
 import java.util.UUID;
 
 @Repository
-public class UserDataReposirory {
+public class UserDataRepository {
 
     @Value("${database.url}")
     private String url;
@@ -46,6 +47,20 @@ public class UserDataReposirory {
             // throw new RuntimeException(e);
         }
         return "";
+    }
+
+    public Role getUserRoleById(UUID userId) {
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try (Connection _connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement statement = _connection.prepareStatement(sql)) {
+            statement.setString(1, userId.toString());
+            ResultSet resultSet = statement.executeQuery();
+            if(!resultSet.next()) return null;
+            return Role.valueOf(resultSet.getString("role"));
+        } catch (SQLException e) {
+            // throw new RuntimeException(e);
+        }
+        return null;
     }
 
 }
