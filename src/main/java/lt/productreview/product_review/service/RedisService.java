@@ -1,5 +1,6 @@
 package lt.productreview.product_review.service;
 
+import lt.productreview.product_review.controller.MessagingController;
 import lt.productreview.product_review.model.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,12 @@ public class RedisService {
         this.jedisPool = new JedisPool(host, port);
     }
 
-    public void addReviewToRedis(Review review){
+    public String addReviewToRedis(Review review){
         String reviewString = userDataService.getUserNameById(review.getUserId())
                 + " left a review: " + review.getProductName() + ", rating (" + review.getRating() + "/5), at "
                 + review.getCreatedAt().withNano(0).format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a", Locale.US));
         put("last_review", reviewString);
+        return reviewString;
     }
 
     public Set<String> getKeys() {

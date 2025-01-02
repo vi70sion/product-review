@@ -35,6 +35,21 @@ public class UserDataRepository {
         }
     }
 
+    public boolean updateUser(User user) {
+        String sql = "UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?";
+        try (Connection _connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement statement = _connection.prepareStatement(sql)) {
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getEmail());
+            statement.setString(3, user.getPassword());
+            statement.setString(4, user.getId().toString());
+            return (statement.executeUpdate() > 0) ? true : false;
+        } catch (SQLException e) {
+            //
+        }
+        return false;
+    }
+
     public String getUserNameById(UUID userId) {
         String sql = "SELECT * FROM users WHERE id = ?";
         try (Connection _connection = DriverManager.getConnection(url, username, password);

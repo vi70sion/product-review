@@ -42,16 +42,16 @@ public class UserDataController {
 
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@RequestBody User user,
-                                        @RequestHeader("Authorisation") String authorizationHeader) {
+                                        @RequestHeader("Authorization") String authorizationHeader) {
         ResponseEntity<String> validationResponse = authorizationService.validateAuthorizationHeader(authorizationHeader);
         if (validationResponse != null) {
             return validationResponse;
         }
-
-        //todo update user info to repository
-
-        // kad nesinervuotų
-        return ResponseEntity.status(200).body("Success");
+        ResponseEntity<String> updateResponse = userDataService.updateUser(user, authorizationHeader);
+        if (updateResponse != null) {
+            return updateResponse;
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("Success.");
     }
 
     @GetMapping("/name")

@@ -2,6 +2,7 @@ package lt.productreview.product_review.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
+import lt.productreview.product_review.controller.MessagingController;
 import lt.productreview.product_review.model.Review;
 import lt.productreview.product_review.model.Role;
 import lt.productreview.product_review.repository.CategoriesRepository;
@@ -30,6 +31,8 @@ public class ReviewService {
     private JwtUtil jwtUtil;
     @Autowired
     private RedisService redisService;
+    @Autowired
+    private MessagingController messagingController;
 
     public List<Review> getReviewsByCategory(String category) {
         return reviewRepository.getReviewsByCategory(category);
@@ -52,7 +55,8 @@ public class ReviewService {
 
             boolean isSaved = reviewRepository.addReview(review);
             if (isSaved) {
-                redisService.addReviewToRedis(review);
+                String reviewString = redisService.addReviewToRedis(review);
+                messagingController.sendMessageToTopic(reviewString);
             }
             return isSaved;
         } catch (IOException e) {
