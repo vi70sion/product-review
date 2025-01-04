@@ -37,7 +37,7 @@ public class MessagingController {
         String token = headerAccessor.getFirstNativeHeader("Authorization");
         ResponseEntity<String> validationResponse = authorizationService.validateAuthorizationHeader(token);
         if (validationResponse != null) {
-            return "Unauthorized.";
+            return "";
         }
         return message;
     }

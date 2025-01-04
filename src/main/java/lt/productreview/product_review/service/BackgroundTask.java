@@ -1,13 +1,23 @@
 package lt.productreview.product_review.service;
 
-import org.springframework.scheduling.annotation.Scheduled;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BackgroundTask {
-    @Scheduled(fixedRate = 1*60*60*1000) // every hour
-    public void performMemoryCleanup() {
-        System.gc();
-        System.out.println("Memory cleanup task completed.");
+
+    @Autowired
+    private EmailProcessor emailProcessor;
+
+    @PostConstruct
+    public void performEmailSent() {
+
+        Thread emailThread = new Thread(emailProcessor);
+        emailThread.start();
+        System.out.println("Email processing thread started.");
+
+
+
     }
 }

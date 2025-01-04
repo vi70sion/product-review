@@ -1,6 +1,5 @@
 package lt.productreview.product_review.service;
 
-import lt.productreview.product_review.controller.MessagingController;
 import lt.productreview.product_review.model.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

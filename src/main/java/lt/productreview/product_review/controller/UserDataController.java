@@ -66,7 +66,7 @@ public class UserDataController {
             userId = UUID.fromString(id);
         } catch (IllegalArgumentException e) {
             //error: wrong UUID format
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid UUID format.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid user ID format.");
         }
         return ResponseEntity
                 .status(HttpStatus.OK)

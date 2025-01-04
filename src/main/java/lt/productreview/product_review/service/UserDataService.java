@@ -35,8 +35,8 @@ public class UserDataService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
         user.setId(userId);
-        String hashedPassword = hashPasswordWithSecret(user.getPassword(), SECRET_WORD);
-        user.setPassword(hashedPassword);
+//        String hashedPassword = hashPasswordWithSecret(user.getPassword(), SECRET_WORD);
+//        user.setPassword(hashedPassword);
         boolean isUpdated = userDataReposirory.updateUser(user);
         if (isUpdated) {
             return ResponseEntity.status(HttpStatus.OK).body("Success.");
