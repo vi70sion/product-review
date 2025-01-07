@@ -8,9 +8,9 @@ class AdminUser extends User {
         super(id, name, email, password, Role.ADMIN);
     }
 
-//    @Override
-//    public void performRole() {
-//        System.out.println("Admin user can manage categories and users.");
-//    }
+    @Override
+    public void performRole() {
+        System.out.println("Admin user can manage categories and users.");
+    }
 
 }

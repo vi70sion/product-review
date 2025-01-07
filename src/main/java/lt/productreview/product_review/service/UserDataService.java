@@ -1,6 +1,8 @@
 package lt.productreview.product_review.service;
 
+import lt.productreview.product_review.model.RegularUser;
 import lt.productreview.product_review.model.User;
+import lt.productreview.product_review.repository.EmailRepository;
 import lt.productreview.product_review.repository.UserDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,10 +24,28 @@ public class UserDataService {
     @Autowired
     UserDataRepository userDataReposirory;
     @Autowired
+    EmailRepository emailRepository;
+    @Autowired
     private JwtUtil jwtUtil;
 
     public UUID validateUser(User user) {
         return userDataReposirory.validateUser(user);
+    }
+
+    public ResponseEntity<String> addUser(RegularUser user) {
+        if(userDataReposirory.emailExistValidation(user.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User email already exists.");
+        }
+        String hashedPassword = hashPasswordWithSecret(user.getPassword(), SECRET_WORD);
+        user.setPassword(hashedPassword);
+        user.setId(UUID.randomUUID());
+        boolean addSuccess = userDataReposirory.addUser(user);
+        if (addSuccess) {
+            emailRepository.saveNewsSubscriber(user.getEmail());
+            return ResponseEntity.status(HttpStatus.OK).body("User added successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding data.");
+        }
     }
 
     public ResponseEntity<String> updateUser(User user, String authorizationHeader) {

@@ -31,6 +31,19 @@ public class ReviewController {
                 .body(reviewService.getReviewsByCategory(category));
     }
 
+
+    @GetMapping("/user")
+    public ResponseEntity<?> getReviewsByUserId(@RequestHeader("Authorization") String authorizationHeader) {
+        ResponseEntity<String> validationResponse = authorizationService.validateAuthorizationHeader(authorizationHeader);
+        if (validationResponse != null) {
+            return validationResponse;
+        }
+        return reviewService.getReviewsByUserId(authorizationHeader);
+
+
+
+    }
+
     @PostMapping("/add")
     public ResponseEntity<?> addReview(@RequestPart("review") String reviewJson,
                                        @RequestParam("image") MultipartFile image,

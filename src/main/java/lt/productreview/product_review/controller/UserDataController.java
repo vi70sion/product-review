@@ -1,5 +1,6 @@
 package lt.productreview.product_review.controller;
 
+import lt.productreview.product_review.model.RegularUser;
 import lt.productreview.product_review.model.User;
 import lt.productreview.product_review.service.AuthorizationService;
 import lt.productreview.product_review.service.JwtUtil;
@@ -38,6 +39,11 @@ public class UserDataController {
         Map<String, String> response = new HashMap<>();
         response.put("token", jwtToken);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity <String> addkUser(@RequestBody RegularUser user, @RequestParam("acceptnews") boolean acceptNews) {
+        return userDataService.addUser(user);
     }
 
     @PutMapping("/update")

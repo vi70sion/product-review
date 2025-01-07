@@ -1,11 +1,14 @@
 package lt.productreview.product_review.repository;
 
+import lt.productreview.product_review.model.RegularUser;
+import lt.productreview.product_review.model.Review;
 import lt.productreview.product_review.model.Role;
 import lt.productreview.product_review.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Repository
@@ -33,6 +36,38 @@ public class UserDataRepository {
         } catch (SQLException e) {
             return null;
         }
+    }
+
+    public boolean addUser(RegularUser user) {
+        String sql = "INSERT INTO users ( id, name, email, password, role) VALUES (?,?,?,?,?)";
+        try (Connection _connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement statement = _connection.prepareStatement(sql)) {
+
+            statement.setString(1, user.getId().toString());
+            statement.setString(2, user.getName());
+            statement.setString(3, user.getEmail());
+            statement.setString(4, user.getPassword());
+            statement.setString(5, user.getRole().toString());
+
+            int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) return true;
+        } catch (SQLException e) {
+            //throw new RuntimeException(e);
+        }
+        return false;
+    }
+
+    public boolean emailExistValidation(String email) {
+        String sql = "SELECT * FROM users WHERE email = ?";
+        try (Connection _connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement statement = _connection.prepareStatement(sql)) {
+            statement.setString(1, email);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()) return true;
+        } catch (SQLException e) {
+            System.out.println("An error occurred while accessing the database.");
+        }
+        return false;
     }
 
     public boolean updateUser(User user) {

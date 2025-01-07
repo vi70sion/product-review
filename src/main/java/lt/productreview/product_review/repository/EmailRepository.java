@@ -66,4 +66,17 @@ public class EmailRepository {
         return false;
     }
 
+    public boolean saveNewsSubscriber(String email) {
+        String sql = "INSERT INTO news_subscribers ( email) VALUES (?)";
+        try (Connection _connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement statement = _connection.prepareStatement(sql)) {
+            statement.setString(1, email);
+            int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) return true;
+        } catch (SQLException e) {
+            //throw new RuntimeException(e);
+        }
+        return false;
+    }
+
 }

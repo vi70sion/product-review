@@ -10,12 +10,6 @@ public class User {
     private String password;
     private Role role;
 
-//    public User(String name, String email, String password, Role role) {
-//        this.name = name;
-//        this.email = email;
-//        this.password = password;
-//        this.role = role;
-//    }
     public User(UUID id, String name, String email, String password, Role role) {
         this.id = id;
         this.name = name;
@@ -24,6 +18,9 @@ public class User {
         this.role = role;
     }
 
+    public void performRole() {
+        System.out.println("All users.");
+    }
     public UUID getId() {
         return id;
     }

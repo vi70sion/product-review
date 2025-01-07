@@ -38,6 +38,23 @@ public class ReviewService {
         return reviewRepository.getReviewsByCategory(category);
     }
 
+    public ResponseEntity<?> getReviewsByUserId(String authorizationHeader) {
+        String token = authorizationHeader.substring(7);
+        // user ID from JWT
+        Claims claims = jwtUtil.decodeJwt(token);
+        String userIdString = claims.get("UserId", String.class);
+        List<Review> reviewList = reviewRepository.getReviewsByUserId(UUID.fromString(userIdString));
+        if (reviewList != null) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(reviewList);
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("null");
+        }
+    }
+
     public boolean addReview(String reviewJson, MultipartFile image, String category, String authorizationHeader) {
         try {
             String token = authorizationHeader.substring(7);

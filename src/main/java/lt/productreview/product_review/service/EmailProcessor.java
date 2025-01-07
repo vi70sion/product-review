@@ -4,7 +4,6 @@ import lt.productreview.product_review.model.EmailForm;
 import lt.productreview.product_review.repository.EmailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
