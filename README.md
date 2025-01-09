@@ -66,16 +66,16 @@ The project uses a MySQL database to store and manage data for users, categories
 
 #### **Tables**
 
-1. **`users`**
+**`users`**
    - Stores user information such as ID, name, email, password, and role.
    - Roles are defined as either `USER` or `ADMIN`.
    - Email addresses must be unique.
 
-2. **`categories`**
+**`categories`**
    - Stores product categories (e.g., Monitors, Electronics, etc.).
    - Each category is identified by an auto-incremented ID.
 
-3. **`reviews`**
+**`reviews`**
    - Stores product reviews, including details like the user who created the review, the product name, category, review text, rating, and an optional photo.
    - Enforces a foreign key relationship with `users` and `categories`.
    - Ensures the rating is a value between 1 and 5.
