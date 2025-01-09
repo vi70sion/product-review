@@ -60,13 +60,64 @@ This project is a Product Reviews platform. It allows users to write reviews, ra
 
 --
 
-- **Database (MySQL)**:
-  - **Tables**:
-    - `Users`: Stores user details (`ID`, `Name`, `Email`, `Password`, `Role`).
-    - `Categories`: Stores product categories (`ID`, `Name`).
-    - `Reviews`: Stores reviews (`ID`, `User ID`, `Product`, `Category ID`, `Text`, `Rating`).
+### **Database (MySQL)**
+
+The project uses a MySQL database to store and manage data for users, categories, and reviews. Below is a brief description of the database schema and the SQL scripts to create the necessary tables.
+
+#### **Tables**
+
+1. **`users`**
+   - Stores user information such as ID, name, email, password, and role.
+   - Roles are defined as either `USER` or `ADMIN`.
+   - Email addresses must be unique.
+
+2. **`categories`**
+   - Stores product categories (e.g., Monitors, Electronics, etc.).
+   - Each category is identified by an auto-incremented ID.
+
+3. **`reviews`**
+   - Stores product reviews, including details like the user who created the review, the product name, category, review text, rating, and an optional photo.
+   - Enforces a foreign key relationship with `users` and `categories`.
+   - Ensures the rating is a value between 1 and 5.
+
+---
+
+#### **SQL Scripts to Create Tables**
+
+```sql
+-- Create the 'users' table
+CREATE TABLE `product_review`.`users` (
+  `id` CHAR(36) NOT NULL,
+  `name` VARCHAR(50) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `role` ENUM('USER', 'ADMIN') NULL DEFAULT 'USER',
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE
+);
+
+-- Create the 'categories' table
+CREATE TABLE `product_review`.`categories` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(100) NOT NULL
+);
+
+-- Create the 'reviews' table
+CREATE TABLE `product_review`.`reviews` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `user_id` CHAR(36) NOT NULL,
+  `category_id` INT NOT NULL,
+  `product_name` CHAR(100) NOT NULL,
+  `review_text` TEXT,
+  `rating` INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  `photo` BLOB,
+  `created_at` DATETIME,
+  FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
+  FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`)
+);
+
   - **Relationships**:
-    - One-to-Many: Users → Reviews.
+    - One-to-Many: Users → Reviews, Categories → Reviews
 
 ### 3. **Redis Caching**
 - Caches the latest reviews for faster client-side rendering.
