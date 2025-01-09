@@ -52,11 +52,11 @@ This project is a Product Reviews platform. It allows users to write reviews, ra
 - Stores and retrieves the latest review for optimized performance.
 - Broadcasts the last review during user subscription to `/topic/messages`.
 
-#### Authorization Middleware
+#### Authorization
 - Validates the `Authorization` token for all endpoints and WebSocket connections.
 
-#### Scheduled Welcome Message
-- Sends a welcome message with the latest review to new subscribers.
+#### Scheduled Message
+- Sends a message with the latest review to new connected users.
 
 --
 
@@ -78,10 +78,8 @@ This project is a Product Reviews platform. It allows users to write reviews, ra
 - **Background Task**: Sends newsletters to users.
 
 ### 6. **Frontend (HTML, CSS, JavaScript)**
-- **User Interfaces**:
-  - Login and Registration screens.
-  - Review listing by category (with search and filtering options).
-  - Review submission form.
+
+The frontend for this project is hosted in a separate repository. You can find it [here](https://github.com/vi70sion/product-review-frontend).
 
 ### 7. **Testing**
 - **JUnit Tests**: Tests for review addition functionality.
