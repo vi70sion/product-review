@@ -83,7 +83,27 @@ The frontend for this project is hosted in a separate repository. You can find i
 
 ### 7. **Testing**
 - **JUnit Tests**: Tests for review addition functionality.
-- **Selenium Tests**: Ensures users can add new reviews.
+
+- **Selenium Tests**
+The Selenium Tests for this project is hosted in a separate repository. You can find it [here](https://github.com/vi70sion/product-review-autotest.git).
+Selenium tests are used to verify the functionality of the Product Review platform through automated UI testing. Below is a brief description of the implemented tests:
+
+#### 1. **User Registration Test**
+This test verifies the user registration and login functionality:
+- Navigates to the registration page.
+- Enters user details such as full name, email, and password.
+- Submits the registration form and confirms successful account creation.
+- Logs in with the newly created credentials.
+- Validates that the logged-in user's name matches the expected name.
+
+#### 2. **Add Review Test**
+This test checks the functionality of adding a new product review:
+- Logs in with existing user credentials.
+- Navigates to the review submission form.
+- Selects a category, enters product details (name, review text, and rating), and uploads an image.
+- Submits the review and verifies that it is successfully added.
+- Validates the new review appears in the appropriate category's review list.
+
 
 ---
 
