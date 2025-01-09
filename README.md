@@ -157,7 +157,8 @@ This test checks the functionality of adding a new product review:
 
 Below is an overview of the project's architecture:
 
-![Project Diagram](/docs/ProductReview diagram.png)
+![Project Diagram](product-review
+/docs/ProductReview diagram.png)
 
 ---
 
