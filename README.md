@@ -58,8 +58,6 @@ This project is a Product Reviews platform. It allows users to write reviews, ra
 #### Scheduled Message
 - Sends a message with the latest review to new connected users.
 
---
-
 ### **Database (MySQL)**
 
 The project uses a MySQL database to store and manage data for users, categories, and reviews. Below is a brief description of the database schema and the SQL scripts to create the necessary tables.
@@ -130,6 +128,31 @@ CREATE TABLE `product_review`.`news_subscribers` (
 ```
   - **Relationships**:
     - One-to-Many: Users → Reviews, Categories → Reviews
+
+### Application Properties Configuration
+
+The `application.properties` file contains the configuration for the `ProductReview` project. Below is a description of each property used:
+
+#### **Properties**
+**Application Information**
+   - `spring.application.name`: The name of the application.
+
+**Encryption**
+   - `encryption.secretKey`: A secret key used for encryption processes (Base64-encoded key generated for password hashing).
+   - `encryption.secretWord`: A salt value to strengthen password encryption.
+
+**Database Configuration**
+   - `database.url`: The JDBC URL for connecting to the MySQL database.
+   - `database.username`: The username for the database.
+   - `database.password`: The password for the database.
+
+**Redis Configuration**
+   - `redis.host`: The hostname of the Redis server.
+   - `redis.port`: The port number for the Redis server.
+
+**SendGrid Configuration**
+   - `sendgrid.api.key`: The API key for SendGrid, used for sending emails (newsletters).
+
 
 ### 3. **Redis Caching**
 - Caches the latest reviews for faster client-side rendering.
