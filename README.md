@@ -1,6 +1,6 @@
 # ProductReview - Product Reviews Platform
 
-This project is a Product Reviews platform. It allows users to write reviews, rate products, and browse reviews based on categories. It includes a frontend built with HTML, CSS, and JavaScript, and a backend using Java Spring Boot with MySQL. The platform also features real-time notifications and performance optimization using Redis caching.
+This project is a Product Reviews platform. It allows users to write reviews, rate products, and browse reviews based on categories. It includes a frontend built with HTML, CSS, and JavaScript (The frontend for this project is hosted in a separate repository. You can find it [here](https://github.com/vi70sion/product-review-frontend).), and a backend using Java Spring Boot with MySQL. The platform also features real-time notifications and performance optimization using Redis caching.
 
 ## Features
 
@@ -92,13 +92,13 @@ CREATE TABLE `product_review`.`users` (
   `role` ENUM('USER', 'ADMIN') NULL DEFAULT 'USER',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE
-);
+)
 
 -- Create the 'categories' table
 CREATE TABLE `product_review`.`categories` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `name` VARCHAR(100) NOT NULL
-);
+)
 
 -- Create the 'reviews' table
 CREATE TABLE `product_review`.`reviews` (
@@ -112,7 +112,7 @@ CREATE TABLE `product_review`.`reviews` (
   `created_at` DATETIME,
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
   FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`)
-);
+)
 
   - **Relationships**:
     - One-to-Many: Users → Reviews, Categories → Reviews
