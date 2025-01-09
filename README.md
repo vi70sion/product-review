@@ -11,10 +11,54 @@ This project is a Product Reviews platform. It allows users to write reviews, ra
   - **Administrator**: Can manage and delete inappropriate reviews.
 
 ### 2. **Backend (Java Spring Boot)**
-- **REST API Endpoints**:
-  - User Management: Registration, login (authentication).
-  - Review Management: Create, read, update, delete (CRUD) reviews. Admin can delete inappropriate reviews.
-  - Category Management: Organize products into categories.
+
+## API Documentation
+
+### User Data Controller (`/api/user`)
+
+| HTTP Method | Endpoint           | Description                                                                                   |
+|-------------|--------------------|-----------------------------------------------------------------------------------------------|
+| `POST`      | `/login`           | Authenticate a user and return a JWT token.                                                  |
+| `POST`      | `/add`             | Register a new user and optionally subscribe to newsletters.                                 |
+| `PUT`       | `/update`          | Update user details. Requires Authorization header with a valid token.                       |
+| `GET`       | `/name`            | Retrieve the name of a user by their ID. Requires Authorization header with a valid token.   |
+
+### Review Controller (`/api/review`)
+
+| HTTP Method | Endpoint           | Description                                                                                   |
+|-------------|--------------------|-----------------------------------------------------------------------------------------------|
+| `GET`       | `/category`        | Retrieve reviews for a specific category. Requires Authorization header with a valid token.   |
+| `GET`       | `/user`            | Retrieve all reviews created by the logged-in user. Requires Authorization header with a valid token. |
+| `POST`      | `/add`             | Add a new review. Accepts a review JSON, image, and category as parameters. Requires Authorization header with a valid token. |
+| `DELETE`    | `/delete`          | Delete a review by its ID. Requires Authorization header with a valid token.                 |
+
+### Categories Controller (`/api/categories`)
+
+| HTTP Method | Endpoint   | Description                                                                                   |
+|-------------|------------|-----------------------------------------------------------------------------------------------|
+| `GET`       | `/all`     | Retrieve a list of all product categories. Requires Authorization header with a valid token.  |
+
+#### WebSocket Endpoints
+
+| Action             | Destination        | Description                                                                                  |
+|--------------------|--------------------|----------------------------------------------------------------------------------------------|
+| `@SendTo`          | `/topic/messages` | Broadcasts messages to all connected users subscribed to this topic.                         |
+
+#### Live Notifications
+- Real-time messages about new reviews using WebSocket.
+- The `/topic/messages` channel is updated without requiring a page reload.
+
+#### Redis Integration
+- Stores and retrieves the latest review for optimized performance.
+- Broadcasts the last review during user subscription to `/topic/messages`.
+
+#### Authorization Middleware
+- Validates the `Authorization` token for all endpoints and WebSocket connections.
+
+#### Scheduled Welcome Message
+- Sends a welcome message with the latest review to new subscribers.
+
+--
 
 - **Database (MySQL)**:
   - **Tables**:
