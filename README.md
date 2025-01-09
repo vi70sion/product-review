@@ -113,7 +113,7 @@ CREATE TABLE `product_review`.`reviews` (
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
   FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`)
 )
-
+```
   - **Relationships**:
     - One-to-Many: Users → Reviews, Categories → Reviews
 
