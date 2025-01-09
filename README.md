@@ -124,7 +124,7 @@ CREATE TABLE `product_review`.`newsletters` (
 -- Create the 'news_subscribers' table
 CREATE TABLE `product_review`.`news_subscribers` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `email` VARCHAR(100) NOT NULL
+  `email` VARCHAR(50) NOT NULL
 )
 
 ```
@@ -177,7 +177,7 @@ Below is an overview of the project's architecture:
 
 ## Installation
 
-### Prerequisites
+### Requirements
 1. **Java**: JDK 21 or newer.
 2. **Spring Boot**: Compatible version installed.
 3. **MySQL**: Database service running.
