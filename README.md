@@ -153,6 +153,11 @@ This test checks the functionality of adding a new product review:
 - Submits the review and verifies that it is successfully added.
 - Validates the new review appears in the appropriate category's review list.
 
+## Project Diagram
+
+Below is an overview of the project's architecture:
+
+![Project Diagram](docs/ProductReview diagram.png)
 
 ---
 
