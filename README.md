@@ -113,6 +113,20 @@ CREATE TABLE `product_review`.`reviews` (
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
   FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`)
 )
+
+-- Create the 'newsletters' table
+CREATE TABLE `product_review`.`newsletters` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `content` TEXT,
+  `sent_at` DATETIME
+)
+
+-- Create the 'news_subscribers' table
+CREATE TABLE `product_review`.`news_subscribers` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `email` VARCHAR(100) NOT NULL
+)
+
 ```
   - **Relationships**:
     - One-to-Many: Users → Reviews, Categories → Reviews
