@@ -80,8 +80,6 @@ The project uses a MySQL database to store and manage data for users, categories
    - Enforces a foreign key relationship with `users` and `categories`.
    - Ensures the rating is a value between 1 and 5.
 
----
-
 #### **SQL Scripts to Create Tables**
 
 ```sql
