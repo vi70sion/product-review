@@ -161,20 +161,32 @@ The `application.properties` file contains the configuration for the `ProductRev
 - **WebSocket**: Live notifications for new reviews are broadcasted to all connected users without page reload.
 
 ### 5. **Multithreading**
-- **Background Task**: Sends newsletters to users.
+- **Background Task**: Sends newsletters from table 'newsletters' to subscribed users in the 'news_subscribers' table.
 
 ### 6. **Frontend (HTML, CSS, JavaScript)**
 
 The frontend for this project is hosted in a separate repository. You can find it [here](https://github.com/vi70sion/product-review-frontend).
 
 ### 7. **Testing**
-- **JUnit Tests**: Tests for review addition functionality.
+
+- **JUnit Tests**
+Tests for UserDataService class methods.
+
+#### 7.1. **testAddUserSuccess**
+This test verifies the behavior of the `addUser` method in the `UserDataService` class. It ensures that:
+- When a user with a unique email is added successfully, the appropriate repository methods are invoked (`addUser` and `saveNewsSubscriber`).
+- The method returns an HTTP 200 OK response with the message "User added successfully."
+
+#### 7.2. **testHashPasswordWithSecret**
+This test validates the functionality of the `hashPasswordWithSecret` method. It confirms that:
+- Given a specific password and secret word, the method correctly hashes the combined string using SHA-256.
+- The resulting hash matches the expected value, ensuring the hashing algorithm and implementation are working as intended.
 
 - **Selenium Tests**
 The Selenium Tests for this project is hosted in a separate repository. You can find it [here](https://github.com/vi70sion/product-review-autotest.git).
 Selenium tests are used to verify the functionality of the Product Review platform through automated UI testing. Below is a brief description of the implemented tests:
 
-#### 1. **User Registration Test**
+#### 7.3. **User Registration Test**
 This test verifies the user registration and login functionality:
 - Navigates to the registration page.
 - Enters user details such as full name, email, and password.
@@ -182,7 +194,7 @@ This test verifies the user registration and login functionality:
 - Logs in with the newly created credentials.
 - Validates that the logged-in user's name matches the expected name.
 
-#### 2. **Add Review Test**
+#### 7.4. **Add Review Test**
 This test checks the functionality of adding a new product review:
 - Logs in with existing user credentials.
 - Navigates to the review submission form.
