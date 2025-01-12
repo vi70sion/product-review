@@ -18,6 +18,10 @@ public class User {
         this.role = role;
     }
 
+    public User() {
+
+    }
+
     public void performRole() {
         System.out.println("All users.");
     }

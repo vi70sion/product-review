@@ -43,7 +43,10 @@ public class ReviewService {
         // user ID from JWT
         Claims claims = jwtUtil.decodeJwt(token);
         String userIdString = claims.get("UserId", String.class);
-        List<Review> reviewList = reviewRepository.getReviewsByUserId(UUID.fromString(userIdString));
+        UUID userId = UUID.fromString(userIdString);
+        Role userRole = userDataRepository.getUserRoleById(userId);
+
+        List<Review> reviewList = reviewRepository.getReviewsByUserId(userId, userRole);
         if (reviewList != null) {
             return ResponseEntity
                     .status(HttpStatus.OK)
@@ -95,6 +98,19 @@ public class ReviewService {
             return ResponseEntity.status(HttpStatus.OK).body("success");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Review not found.");
+        }
+    }
+
+    public ResponseEntity<?> getReviewsBySearchText(String searchText, String authorizationHeader) {
+        List<Review> reviewList = reviewRepository.getReviewsBySearchText(searchText);
+        if (reviewList != null) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(reviewList);
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("null");
         }
     }
 

@@ -39,9 +39,6 @@ public class ReviewController {
             return validationResponse;
         }
         return reviewService.getReviewsByUserId(authorizationHeader);
-
-
-
     }
 
     @PostMapping("/add")
@@ -67,6 +64,16 @@ public class ReviewController {
             return validationResponse;
         }
         return reviewService.deleteReviewById(reviewId, authorizationHeader);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> getReviewsBySearchText(@RequestParam("searchtext") String searchText,
+                                                  @RequestHeader("Authorization") String authorizationHeader) {
+        ResponseEntity<String> validationResponse = authorizationService.validateAuthorizationHeader(authorizationHeader);
+        if (validationResponse != null) {
+            return validationResponse;
+        }
+        return reviewService.getReviewsBySearchText(searchText, authorizationHeader);
     }
 
 }

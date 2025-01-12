@@ -101,6 +101,67 @@ paths:
             application/json:
               schema:
                 type: string
+
+  /user/add:
+    post:
+      summary: Add a new user
+      description: Adds a new user to the system. Accepts user details in the request body and a `acceptnews` flag as a query parameter.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier for the user.
+                name:
+                  type: string
+                  description: The name of the user.
+                email:
+                  type: string
+                  format: email
+                  description: The email address of the user.
+                password:
+                  type: string
+                  format: password
+                  description: The password for the user account.
+                role:
+                  type: string
+                  description: The role assigned to the user (e.g., ADMIN, USER).
+              required:
+                - name
+                - email
+                - password
+      parameters:
+        - name: acceptnews
+          in: query
+          required: true
+          description: A boolean indicating whether the user accepts news subscriptions.
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: User added successfully.
+          content:
+            application/json:
+              schema:
+                type: string
+        '409':
+          description: Conflict. The user's email already exists.
+          content:
+            application/json:
+              schema:
+                type: string
+        '500':
+          description: Internal server error. An error occurred while adding the user.
+          content:
+            application/json:
+              schema:
+                type: string
+
   /categories/all:
     get:
       summary: Get all categories
@@ -322,4 +383,130 @@ paths:
             application/json:
               schema:
                 type: string
-                example: "Invalid or missing authorization header."                
+                example: "Invalid or missing authorization header."
+  /review/search:
+    get:
+      summary: Retrieve reviews by search text
+      description: Retrieves reviews that match the provided search text. Requires an Authorization header with a valid token.
+      parameters:
+        - name: searchtext
+          in: query
+          required: true
+          description: The search text used to filter reviews.
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer token for authorization.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of reviews matching the search criteria.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: Review ID
+                    userId:
+                      type: string
+                      format: uuid
+                      description: User ID associated with the review
+                    categoryId:
+                      type: integer
+                      description: Category ID
+                    productName:
+                      type: string
+                      description: Product name reviewed
+                    reviewText:
+                      type: string
+                      description: Review text
+                    rating:
+                      type: integer
+                      description: Rating given to the product
+                    photo:
+                      type: string
+                      format: byte
+                      description: Photo associated with the review
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: Timestamp when the review was created
+        '400':
+          description: Bad request or no matching reviews found.
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized access. Invalid or missing authorization header.
+          content:
+            application/json:
+              schema:
+                type: string
+  /review/user:
+    get:
+      summary: Retrieve all reviews created by the logged-in user
+      description: Retrieves all reviews created by the user associated with the provided JWT in the `Authorization` header.
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer token for authorization.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of reviews created by the logged-in user.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: Review ID
+                    userId:
+                      type: string
+                      format: uuid
+                      description: User ID associated with the review
+                    categoryId:
+                      type: integer
+                      description: Category ID
+                    productName:
+                      type: string
+                      description: Product name reviewed
+                    reviewText:
+                      type: string
+                      description: Review text
+                    rating:
+                      type: integer
+                      description: Rating given to the product
+                    photo:
+                      type: string
+                      format: byte
+                      description: Photo associated with the review
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: Timestamp when the review was created
+        '400':
+          description: Bad request or no reviews found for the user.
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized access. Invalid or missing authorization header.
+          content:
+            application/json:
+              schema:
+                type: string

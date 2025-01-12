@@ -71,13 +71,10 @@ public class UserDataRepository {
     }
 
     public boolean updateUser(User user) {
-        //String sql = "UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?";
         String sql = "UPDATE users SET name = ? WHERE id = ?";
         try (Connection _connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = _connection.prepareStatement(sql)) {
             statement.setString(1, user.getName());
-//            statement.setString(2, user.getEmail());
-//            statement.setString(3, user.getPassword());
             statement.setString(2, user.getId().toString());
             return (statement.executeUpdate() > 0) ? true : false;
         } catch (SQLException e) {
