@@ -31,6 +31,8 @@ This project is a Product Reviews platform. It allows users to write reviews, ra
 | `GET`       | `/user`            | Retrieve all reviews created by the logged-in user. Requires Authorization header with a valid token. |
 | `POST`      | `/add`             | Add a new review. Accepts a review JSON, image, and category as parameters. Requires Authorization header with a valid token. |
 | `DELETE`    | `/delete`          | Delete a review by its ID. Requires Authorization header with a valid token.                 |
+| `GET`       | `/search`          | Retrieve reviews by search text. Accepts `searchtext` as a query parameter. Requires `Authorization` header with a valid token. |
+
 
 ### Categories Controller (`/api/categories`)
 
